@@ -30,11 +30,11 @@ public class Resume {
     @JsonManagedReference
     private User user;
 
-    @OneToMany(mappedBy = "resume")
+    @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL)
     @JsonBackReference
     private List<Career> careers = new ArrayList<>();
 
-    @OneToMany(mappedBy = "resume")
+    @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL)
     @JsonBackReference
     private List<Skill> skills = new ArrayList<>();
 }

@@ -46,7 +46,6 @@ public class UserService {
             ex.printStackTrace();
             throw new IllegalStateException("Unauthorized");
         }
-//      if userRepository.findByKakaoId()
 
     }
 }

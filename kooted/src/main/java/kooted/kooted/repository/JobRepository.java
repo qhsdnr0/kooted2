@@ -34,6 +34,21 @@ public class JobRepository {
         }
     }
 
+    public JobGroup findJobGroupByName(String name) {
+        try {
+            JobGroup jobGroup = em.createQuery("select j from JobGroup j where j.name = :name", JobGroup.class)
+                    .setParameter("name", name)
+                    .getSingleResult();
+            if (jobGroup == null) {
+                throw new IllegalStateException();
+            }
+            return jobGroup;
+        } catch (IllegalStateException ex) {
+            ex.printStackTrace();
+            throw new IllegalStateException("JOB_GROUP_DOES_NOT_EXIST");
+        }
+    }
+
     public void saveJob (Job job) {
         em.persist(job);
     }
@@ -41,6 +56,21 @@ public class JobRepository {
     public Job findOne(Long id) {
         try {
             Job job = em.find(Job.class, id);
+            if (job == null) {
+                throw new IllegalStateException();
+            }
+            return job;
+        } catch (IllegalStateException ex) {
+            ex.printStackTrace();
+            throw new IllegalStateException("JOB_DOES_NOT_EXIST");
+        }
+    }
+
+    public Job findJobByName(String name) {
+        try {
+            Job job = em.createQuery("select j from Job j where j.name = :name", Job.class)
+                    .setParameter("name", name)
+                    .getSingleResult();
             if (job == null) {
                 throw new IllegalStateException();
             }

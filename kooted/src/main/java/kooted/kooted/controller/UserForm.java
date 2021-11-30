@@ -15,12 +15,12 @@ public class UserForm {
     private String college;
     private BigDecimal salary;
     private String introduction;
-    private Boolean inOffice;
-    private String companyName;
+    private Boolean in_office;
+    private String company_name;
     private String duty;
-    private LocalDate dateOfJoining;
-    private LocalDate dateOfResigning;
+    private LocalDate date_of_joining;
+    private LocalDate date_of_resigning;
 
-    private Long jobId;
-    private Long workingYearId;
+    private Long job_id;
+    private Long working_year;
 }

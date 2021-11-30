@@ -1,6 +1,7 @@
 package kooted.kooted.controller;
 
 import kooted.kooted.model.AddInfo;
+import kooted.kooted.model.Career;
 import kooted.kooted.model.User;
 import kooted.kooted.model.UserWorkingYear;
 import kooted.kooted.repository.JobRepository;
@@ -23,7 +24,6 @@ import java.util.HashMap;
 @RequestMapping("users")
 @CrossOrigin
 public class UserController {
-
 
     private final UserService userService;
     private final UserRepository userRepository;
@@ -76,12 +76,13 @@ public class UserController {
         HashMap<String, Object> result = new HashMap<>();
         try {
             User user = userRepository.findOne(accessToken.decodeJwtToken(token));
-            AddInfo addInfo = new AddInfo(userForm.getCollege(), userForm.getSalary(), userForm.getIntroduction(), userForm.getCompanyName(),
-                                          userForm.getInOffice(), userForm.getDuty(), userForm.getDateOfJoining(), userForm.getDateOfResigning());
+            Career career = new Career();
+            AddInfo addInfo = new AddInfo(userForm.getCollege(), userForm.getSalary(), userForm.getIntroduction(), userForm.getCompany_name(),
+                    userForm.getIn_office(), userForm.getDuty(), userForm.getDate_of_joining(), userForm.getDate_of_resigning());
             UserWorkingYear userWorkingYear = new UserWorkingYear();
             userWorkingYear.setUser(user);
-            userWorkingYear.setJob(jobRepository.findOne(userForm.getJobId()));
-            userWorkingYear.setWorkingYear(jobRepository.findWorkingYear(userForm.getWorkingYearId()));
+            userWorkingYear.setJob(jobRepository.findOne(userForm.getJob_id()));
+            userWorkingYear.setWorkingYear(jobRepository.findWorkingYear(userForm.getWorking_year()));
             user.setAddInfo(addInfo);
             user.getUserWorkingYears().add(userWorkingYear);
             userRepository.saveUserWorkingYear(userWorkingYear);

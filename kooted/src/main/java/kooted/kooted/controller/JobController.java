@@ -18,15 +18,15 @@ public class JobController {
     @PostMapping("job-groups")
     public void createJobGroup(@RequestBody JobForm jobForm) throws NullPointerException {
         JobGroup jobGroup = new JobGroup();
-        jobGroup.setName(jobForm.getJobGroupName());
+        jobGroup.setName(jobForm.getJob_group_name());
         jobRepository.saveJobGroup(jobGroup);
     }
 
     @PostMapping("jobs")
     public void createJob(@RequestBody JobForm jobForm) {
         Job job = new Job();
-        job.setName(jobForm.getJobName());
-        job.setJobGroup(jobRepository.findJobGroup(jobForm.getJobGroupId()));
+        job.setName(jobForm.getJob_name());
+        job.setJobGroup(jobRepository.findJobGroup(jobForm.getJob_group_id()));
         jobRepository.saveJob(job);
     }
 }

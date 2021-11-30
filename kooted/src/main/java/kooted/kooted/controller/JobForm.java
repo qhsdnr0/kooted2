@@ -8,8 +8,8 @@ import javax.validation.constraints.NotEmpty;
 @Getter @Setter
 public class JobForm {
 
-    private String jobGroupName;
+    private String job_group_name;
 
-    private Long jobGroupId;
-    private String jobName;
+    private Long job_group_id;
+    private String job_name;
 }

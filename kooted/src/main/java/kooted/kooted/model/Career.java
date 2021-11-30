@@ -16,6 +16,7 @@ public class Career {
 
     private String companyName;
     private String duty;
+    private Boolean inOffice;
 
     private LocalDate dateOfJoining;
     private LocalDate dateOfResigning;
