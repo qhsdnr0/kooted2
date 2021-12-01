@@ -1,9 +1,6 @@
 package kooted.kooted.repository;
 
-import kooted.kooted.model.BookMark;
-import kooted.kooted.model.Post;
-import kooted.kooted.model.User;
-import kooted.kooted.model.UserWorkingYear;
+import kooted.kooted.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -52,6 +49,21 @@ public class UserRepository {
     public List<BookMark> getBookMark(User user) {
         return em.createQuery("select p from User u join BookMark b on u= : user", BookMark.class)
                 .setParameter("user", user)
+                .getResultList();
+    }
+
+    public List<Object> getAverageSalaryByJob(Job job) {
+        return em.createQuery("select coalesce((select avg(u.addInfo.salary) from User u join UserWorkingYear w on w.user=u " +
+                        "group by w.job,w.workingYear having w.job=j and w.workingYear=y),0) as avg, j.name, y.years from WorkingYear y join Job j on j= :job order by y.years")
+                .setParameter("job", job)
+                .getResultList();
+
+    }
+
+    public List<Object> getAverageSalaryByJobGroup(JobGroup jobGroup) {
+        return em.createQuery("select coalesce((select avg(u.addInfo.salary) from User u join UserWorkingYear w on w.user=u group by w.job.jobGroup,w.workingYear having w.job.jobGroup=j " +
+                        "and w.workingYear=y),0) as avg, j.name, y.years from WorkingYear y join JobGroup j on j= :jobGroup order by y.years")
+                .setParameter("jobGroup", jobGroup)
                 .getResultList();
     }
 }

@@ -17,7 +17,7 @@ public class WorkingYear {
     @Column(name = "working_year_id")
     private Long id;
 
-    private String years;
+    private int years;
 
     @OneToMany(mappedBy = "workingYear")
     @JsonBackReference

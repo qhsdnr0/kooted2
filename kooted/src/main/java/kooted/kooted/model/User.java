@@ -38,7 +38,7 @@ public class User {
     @JsonBackReference
     private List<Application> applications = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonBackReference
     private List<UserWorkingYear> userWorkingYears = new ArrayList<>();
 }

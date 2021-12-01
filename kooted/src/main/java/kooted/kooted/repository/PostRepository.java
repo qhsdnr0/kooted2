@@ -26,19 +26,13 @@ public class PostRepository {
                 .getSingleResult();
     }
 
-    public List<?> findByJob(Job job, String sort, int limit, int offset) {
+    public List<Object> findByJob(Job job, String sort, int limit, int offset) {
         String sortValue = sort.equals("-cnt") ? "order by cnt desc" : String.format("order by %s", sort);
-
-
-        return (em.createQuery("select p, coalesce((select count(b) from BookMark b where b.post=p),0) as cnt from Post p where job= :job " + sortValue)
+        return em.createQuery("select p, coalesce((select count(b) from BookMark b where b.post=p),0) as cnt from Post p where job= :job " + sortValue)
                 .setFirstResult(offset)
                 .setMaxResults(limit)
                 .setParameter("job", job)
-//                .setParameter("sort", sort)
-                .getResultList());
-//        }
-//        Collections.sort(result, )
-//        return result;
+                .getResultList();
 
     }
 

@@ -2,6 +2,7 @@ package kooted.kooted.service;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import kooted.kooted.model.User;
+import kooted.kooted.model.UserWorkingYear;
 import kooted.kooted.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;

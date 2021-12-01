@@ -1,9 +1,6 @@
 package kooted.kooted.controller;
 
-import kooted.kooted.model.AddInfo;
-import kooted.kooted.model.Career;
-import kooted.kooted.model.User;
-import kooted.kooted.model.UserWorkingYear;
+import kooted.kooted.model.*;
 import kooted.kooted.repository.ApplicationRepository;
 import kooted.kooted.repository.JobRepository;
 import kooted.kooted.repository.UserRepository;
@@ -44,7 +41,6 @@ public class UserController {
     @GetMapping("/kakao")
     public HashMap<String, Object> getOrCreateUser(@RequestHeader("Authorization") String token) {
         HashMap<String, Object> result = new HashMap<>();
-        System.out.println(token);
 
         try {
             String userInfo = userService.createKakaoUser(token);
@@ -77,7 +73,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("/kakao")
+    @PutMapping("")
     public HashMap<String, Object> updateUser(@RequestHeader("Authorization") String token, @RequestBody UserForm userForm) {
         HashMap<String, Object> result = new HashMap<>();
         try {
@@ -86,17 +82,33 @@ public class UserController {
             AddInfo addInfo = new AddInfo(userForm.getCollege(), userForm.getSalary(), userForm.getIntroduction(), userForm.getCompany_name(),
                     userForm.getIn_office(), userForm.getDuty(), userForm.getDate_of_joining(), userForm.getDate_of_resigning());
             UserWorkingYear userWorkingYear = new UserWorkingYear();
+
+            if (!user.getUserWorkingYears().isEmpty()) {
+                userWorkingYear = user.getUserWorkingYears().get(0);
+            }
+
             userWorkingYear.setUser(user);
             userWorkingYear.setJob(jobRepository.findOne(userForm.getJob_id()));
             userWorkingYear.setWorkingYear(jobRepository.findWorkingYear(userForm.getWorking_year()));
             user.setAddInfo(addInfo);
             user.getUserWorkingYears().add(userWorkingYear);
-            userRepository.saveUserWorkingYear(userWorkingYear);
             result.put("message", "SUCCESS");
             return result;
         } catch (IllegalStateException ex) {
             ex.printStackTrace();
             throw new IllegalStateException("INVALID_INPUT");
         }
+    }
+
+    @GetMapping("salary")
+    public HashMap<String, Object> getSalaryAverage(@RequestParam(required = false) String job, @RequestParam(required = false) String job_group) {
+        HashMap<String, Object> result = new HashMap<>();
+        if (job_group != null) {
+            result.put("averageSalary", userRepository.getAverageSalaryByJobGroup(jobRepository.findJobGroupByName(job_group)));
+
+        } else if (job != null) {
+            result.put("averageSalary", userRepository.getAverageSalaryByJob(jobRepository.findJobByName(job)));
+        }
+        return result;
     }
 }
