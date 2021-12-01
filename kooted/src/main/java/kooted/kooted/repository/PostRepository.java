@@ -8,7 +8,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -28,9 +27,10 @@ public class PostRepository {
     }
 
     public List<?> findByJob(Job job, String sort, int limit, int offset) {
-        String sortValue = String.format("order by %s", sort);
+        String sortValue = sort.equals("-cnt") ? "order by cnt desc" : String.format("order by %s", sort);
 
-        return (em.createQuery("select p, isnull((select count(b) from BookMark b where b.post=p), 0) as count from Post p where job= :job " + sortValue)
+
+        return (em.createQuery("select p, coalesce((select count(b) from BookMark b where b.post=p),0) as cnt from Post p where job= :job " + sortValue)
                 .setFirstResult(offset)
                 .setMaxResults(limit)
                 .setParameter("job", job)
