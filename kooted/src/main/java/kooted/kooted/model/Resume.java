@@ -1,6 +1,7 @@
 package kooted.kooted.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,10 +13,12 @@ import java.util.List;
 
 @Entity
 @Table(name = "resumes")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Getter @Setter
 public class Resume {
 
     @Id @GeneratedValue
+    @Column(name = "resume_id")
     private Long id;
 
     private String college;

@@ -12,6 +12,7 @@ import javax.persistence.*;
 public class PostImage {
 
     @Id @GeneratedValue
+    @Column(name = "post_image_id")
     private Long id;
 
     @Column(length = 2000)

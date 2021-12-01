@@ -4,6 +4,7 @@ import kooted.kooted.model.AddInfo;
 import kooted.kooted.model.Career;
 import kooted.kooted.model.User;
 import kooted.kooted.model.UserWorkingYear;
+import kooted.kooted.repository.ApplicationRepository;
 import kooted.kooted.repository.JobRepository;
 import kooted.kooted.repository.UserRepository;
 import kooted.kooted.service.UserService;
@@ -27,12 +28,17 @@ public class UserController {
 
     private final UserService userService;
     private final UserRepository userRepository;
+    private final ApplicationRepository applicationRepository;
     private final JobRepository jobRepository;
     private final Token accessToken;
 
-    @GetMapping("/hello")
-    public User a() {
-        return userRepository.findOne(Long.parseLong("2"));
+    @GetMapping("")
+    public HashMap<String, Object> getUserInfo(@RequestHeader("Authorization") String token) {
+        HashMap<String, Object> result = new HashMap<>();
+        User user = userRepository.findOne(accessToken.decodeJwtToken(token));
+        result.put("result", applicationRepository.findUserInfo(user));
+        result.put("count", applicationRepository.findUserInfo(user).size());
+        return result;
     }
 
     @GetMapping("/kakao")

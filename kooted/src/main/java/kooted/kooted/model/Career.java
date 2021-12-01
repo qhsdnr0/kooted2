@@ -12,6 +12,7 @@ import java.time.LocalDate;
 public class Career {
 
     @Id @GeneratedValue
+    @Column(name = "career_id")
     private Long id;
 
     private String companyName;

@@ -1,10 +1,14 @@
 package kooted.kooted.controller;
 
+import kooted.kooted.model.BookMark;
 import kooted.kooted.model.Post;
+import kooted.kooted.model.User;
 import kooted.kooted.repository.CompanyRepository;
 import kooted.kooted.repository.JobRepository;
 import kooted.kooted.repository.PostRepository;
+import kooted.kooted.repository.UserRepository;
 import kooted.kooted.service.PostService;
+import kooted.kooted.token.Token;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +29,8 @@ public class PostController {
     private final PostRepository postRepository;
     private final JobRepository jobRepository;
     private final CompanyRepository companyRepository;
+    private final UserRepository userRepository;
+    private final Token access_token;
 
     @PostMapping("")
     public void createPost(@RequestBody PostForm postForm) {
@@ -43,8 +49,10 @@ public class PostController {
     }
 
     @GetMapping("/{postId}")
-    public Post getPost(@PathVariable(value = "postId") Long id) {
-        return postRepository.findOne(id);
+    public HashMap<String, Object> getPost(@PathVariable(value = "postId") Long id) {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("count", postRepository.getPostWithCount(postRepository.findOne(id)));
+        return result;
     }
 
     @GetMapping("")
@@ -53,7 +61,8 @@ public class PostController {
             @RequestParam(required = false) String job_group,
             @RequestParam(required = false) String sort,
             @RequestParam(required = false) Integer limit,
-            @RequestParam(required = false) Integer offset) {
+            @RequestParam(required = false) Integer offset
+    ) {
         HashMap<String, Object> result = new HashMap<>();
         System.out.println(limit);
         if (limit == null) {  limit = 8; }
@@ -70,4 +79,6 @@ public class PostController {
 
         return result;
     }
+
+
 }

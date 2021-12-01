@@ -1,5 +1,6 @@
 package kooted.kooted.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 public class Application {
 
     @Id @GeneratedValue
+    @Column(name = "application_id")
     private Long id;
 
     private String recommender;

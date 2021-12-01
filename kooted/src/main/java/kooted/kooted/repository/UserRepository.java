@@ -1,5 +1,7 @@
 package kooted.kooted.repository;
 
+import kooted.kooted.model.BookMark;
+import kooted.kooted.model.Post;
 import kooted.kooted.model.User;
 import kooted.kooted.model.UserWorkingYear;
 import lombok.RequiredArgsConstructor;
@@ -39,5 +41,17 @@ public class UserRepository {
 
     public void saveUserWorkingYear(UserWorkingYear userWorkingYear) {
         em.persist(userWorkingYear);
+    }
+
+    public void saveBookMark(BookMark bookMark) {
+        em.persist(bookMark);
+    }
+
+    public void deleteBookMark(BookMark bookMark) { em.remove(bookMark);}
+
+    public List<BookMark> getBookMark(User user) {
+        return em.createQuery("select p from User u join BookMark b on u= : user", BookMark.class)
+                .setParameter("user", user)
+                .getResultList();
     }
 }

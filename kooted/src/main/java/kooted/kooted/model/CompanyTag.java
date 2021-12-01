@@ -12,6 +12,7 @@ import javax.persistence.*;
 public class CompanyTag {
 
     @Id @GeneratedValue
+    @Column(name = "company_tag_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

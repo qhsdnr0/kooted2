@@ -17,6 +17,7 @@ import java.util.List;
 public class Job {
 
     @Id @GeneratedValue
+    @Column(name = "job_id")
     private Long id;
 
     private String name;

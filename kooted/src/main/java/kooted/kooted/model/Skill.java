@@ -11,6 +11,7 @@ import javax.persistence.*;
 public class Skill {
 
     @Id @GeneratedValue
+    @Column(name = "skill_id")
     private Long id;
 
     private String name;

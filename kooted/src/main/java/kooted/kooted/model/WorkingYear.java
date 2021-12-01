@@ -14,6 +14,7 @@ import java.util.List;
 public class WorkingYear {
 
     @Id @GeneratedValue
+    @Column(name = "working_year_id")
     private Long id;
 
     private String years;

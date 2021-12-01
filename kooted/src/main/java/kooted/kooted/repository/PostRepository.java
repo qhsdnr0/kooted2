@@ -6,6 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -24,27 +27,33 @@ public class PostRepository {
                 .getSingleResult();
     }
 
-    public List<Post> findByJob(Job job, String sort, int limit, int offset) {
-        if (sort.equals("count")) {
-            TypedQuery<Post> query = em.createQuery("select p, count(b.id) from Post p join (select count(id) as cnt from BookMark group by id) b on b.post=p)", Post.class);
-            return query.setFirstResult(offset)
-                    .setMaxResults(limit)
-                    .setParameter("job", job)
-                    .setParameter("sort", sort)
-                    .getResultList();
-        } else {
-            TypedQuery<Post> query = em.createQuery("select p from Post p where p.job=:job order by :sort", Post.class);
-            return query.setFirstResult(offset)
-                    .setMaxResults(limit)
-                    .setParameter("job", job)
-                    .setParameter("sort", sort)
-                    .getResultList();
-        }
+    public List<?> findByJob(Job job, String sort, int limit, int offset) {
+        String sortValue = String.format("order by %s", sort);
+
+        return (em.createQuery("select p, isnull((select count(b) from BookMark b where b.post=p), 0) as count from Post p where job= :job " + sortValue)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .setParameter("job", job)
+//                .setParameter("sort", sort)
+                .getResultList());
+//        }
+//        Collections.sort(result, )
+//        return result;
+
     }
 
-    public List<Post> findByJobGroup(JobGroup jobGroup, String sort, long limit, long offset) {
+    public List<?> findByJobGroup(JobGroup jobGroup, String sort, int limit, int offset) {
+        List<List<?>> result = new ArrayList<>();
+        int postSize = 0;
+        for (Job job : jobGroup.getJobs()) {
+            postSize += job.getPosts().size();
+        }
+
+        int startValue = Math.min(offset, postSize);
+        int endValue = Math.min(offset + limit, postSize);
+
         if (sort.equals("count")) {
-            return em.createQuery("select p from Post p join BookMark b on b.post= p where p.job.jobGroup= :jobGroup order by (select count(p) from b) offset= :offset, limit= :limit", Post.class)
+            return em.createQuery("select p, j, (select count(id) from BookMark group by post having post= :post) as count from Post p where p= :post")
                     .setParameter("jobGroup", jobGroup)
                     .setParameter("sort", sort)
                     .setParameter("limit", limit)
@@ -60,15 +69,21 @@ public class PostRepository {
         }
     }
 
-
-    public List<Post> findByCompany(Company company) {
-        return em.createQuery("select p from Post p where p.company = :company", Post.class)
-                .setParameter("company", company)
+    public List<Post> findAll() {
+        return em.createQuery("select p from Post p", Post.class)
                 .getResultList();
     }
 
-    public List<Post> findAll() {
-        return em.createQuery("select p from Post p", Post.class)
+    public BookMark getBookMark(User user, Post post) {
+        return em.createQuery("select b from BookMark b where b.user= :user and b.post= :post", BookMark.class)
+                .setParameter("user", user)
+                .setParameter("post", post)
+                .getSingleResult();
+    }
+
+    public List<?> getPostWithCount(Post post) {
+        return em.createQuery("select p, (select count(id) from BookMark group by post having post= :post) as count from Post p where p= :post")
+                .setParameter("post", post)
                 .getResultList();
     }
 }

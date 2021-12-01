@@ -12,6 +12,7 @@ import javax.persistence.*;
 public class UserWorkingYear {
 
     @Id @GeneratedValue
+    @Column(name = "user_working_year_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

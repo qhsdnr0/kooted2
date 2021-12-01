@@ -12,6 +12,7 @@ import javax.persistence.*;
 public class BookMark {
 
     @Id @GeneratedValue
+    @Column(name = "bookmark_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

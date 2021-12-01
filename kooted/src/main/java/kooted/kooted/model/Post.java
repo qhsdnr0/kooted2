@@ -18,6 +18,7 @@ import java.util.List;
 public class Post {
 
     @Id @GeneratedValue
+    @Column(name = "post_id")
     private Long id;
 
     private String title;
